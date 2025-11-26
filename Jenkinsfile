@@ -3,16 +3,16 @@ pipeline {
     stages {
         stage('Scan checkov') {
             agent {
-                docker { image 'bridgecrew/checkov:latest' args ' --entrypoint ""' }
-               
+                docker { 
+                    image 'bridgecrew/checkov:latest' 
+                    args ' --entrypoint ""' 
+                }
             }
             steps {
                 sh 'checkov --soft-fail -o cli -o json --output-file-path console,results.json -d .'
-                 archiveArtifacts artifacts: 'results.json', fingerprint: true, allowEmptyArchive: true
-              
-              }
+                archiveArtifacts artifacts: 'results.json', fingerprint: true, allowEmptyArchive: true
+            }
         }
-
         stage('TruffleHog Scan') {
             agent {
                 docker { 
@@ -31,4 +31,3 @@ pipeline {
 
     }
 }
-
